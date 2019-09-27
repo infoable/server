@@ -69,7 +69,6 @@ module.exports = async (query, user) => {
 
   for (const m of matches) {
     if (query.match(m.test)) {
-      console.log(user);
       return await m.exec(query, user, m.test);
     }
   }
