@@ -34,8 +34,9 @@ app.use(async (ctx, next) => {
         error: err.message
       };
     } else {
+      console.error(err.stack);
       ctx.body = {
-        success: true,
+        success: false,
         error: "Error is occurred. Please Try Again."
       };
     }
