@@ -73,7 +73,6 @@ router.put("/:id/action/:aid", async ctx => {
   const { id, aid } = ctx.params;
   const api = await API.findOne({ _id: id });
   if (!api) return ctx.throw(404, "API를 찾을 수 없습니다.");
-  let flag = false;
   const action = api.actions.id(aid);
   if (!action) return ctx.throw(404, "액션을 찾을 수 없습니다.");
   action.doings = ctx.request.body.workflows;
