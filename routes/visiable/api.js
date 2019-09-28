@@ -3,10 +3,11 @@ const router = new Router();
 
 const API = require("../../models/API");
 router.post("/", async ctx => {
-  const { site, by } = ctx.request.body;
+  const { site, name, by } = ctx.request.body;
 
   const api = new API({
     site,
+    name,
     by
   });
 
@@ -33,10 +34,53 @@ router.get("/:id", async ctx => {
   const { id } = ctx.params;
 
   const api = await API.findOne({ _id: id });
+  if (!api) return ctx.throw(404, "API를 찾을 수 없습니다.");
 
   ctx.body = {
     success: true,
     data: api
+  };
+});
+
+router.get("/:id/action/:aid", async ctx => {
+  const { id, aid } = ctx.params;
+  const api = await API.findOne({ _id: id });
+  if (!api) return ctx.throw(404, "API를 찾을 수 없습니다.");
+
+  const action = api.actions.id(aid);
+  ctx.body = {
+    success: true,
+    data: action
+  };
+});
+router.post("/:id/action", async ctx => {
+  const { id } = ctx.params;
+  const api = await API.findOne({ _id: id });
+  if (!api) return ctx.throw(404, "API를 찾을 수 없습니다.");
+
+  const { name } = ctx.request.body;
+  api.actions.push({
+    name
+  });
+  await api.save();
+
+  ctx.status = 201;
+  ctx.body = {
+    success: true
+  };
+});
+router.put("/:id/action/:aid", async ctx => {
+  const { id, aid } = ctx.params;
+  const api = await API.findOne({ _id: id });
+  if (!api) return ctx.throw(404, "API를 찾을 수 없습니다.");
+  let flag = false;
+  const action = api.actions.id(aid);
+  if (!action) return ctx.throw(404, "액션을 찾을 수 없습니다.");
+  action.doings = ctx.request.body.workflows;
+  await api.save();
+
+  ctx.body = {
+    success: true
   };
 });
 module.exports = router;

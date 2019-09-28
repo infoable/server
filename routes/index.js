@@ -1,4 +1,4 @@
 module.exports = {
-  "/req": require("./request"),
+  "/api": require("./api"),
   "/visiable": require("./visiable")
 };
