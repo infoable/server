@@ -30,7 +30,7 @@ router.get("/user/:userid", async ctx => {
     {
       by: userid
     },
-    ["_id", "site"]
+    ["_id", "site", "name"]
   );
 
   ctx.body = {
