@@ -2,6 +2,14 @@ const Router = require("koa-router");
 const router = new Router();
 
 const API = require("../../models/API");
+router.get('/', async ctx => {
+  const apis = await API.find({}, ["site", "name", "_id", "by"]).limit(15).populate('by', 'username');
+
+  ctx.body = {
+    success: true,
+    data: apis
+  }
+});
 router.post("/", async ctx => {
   const { site, name, by } = ctx.request.body;
 

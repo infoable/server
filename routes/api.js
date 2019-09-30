@@ -18,6 +18,9 @@ router.get("/list", async ctx => {
     if (a.actions.length < b.actions.length) return 1;
     return 0;
   })[0];
+  if (!api || !api.actions) {
+    return ctx.throw(404, "액션이 없습니다.");
+  }
   const actions = api.actions.map(v => v.name);
 
   ctx.body = {
