@@ -90,4 +90,15 @@ router.put("/:id/action/:aid", async ctx => {
     success: true
   };
 });
+router.delete("/:id/action/:aid", async ctx => {
+  const { id, aid } = ctx.params;
+  const api = await API.findOne({ _id: id });
+  if (!api) return ctx.throw(404, "API를 찾을 수 없습니다.");
+  api.actions.id(aid).remove();
+  await api.save();
+
+  ctx.body = {
+    success: true
+  };
+});
 module.exports = router;
